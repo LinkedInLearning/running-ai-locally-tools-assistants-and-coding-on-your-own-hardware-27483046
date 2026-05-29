@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus — AI-Powered Dev Tool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root { --gold: #D4AF37; --gold-light: #E8D48B; --gold-dark: #B8960D; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; -webkit-font-smoothing: antialiased; }
+    .font-serif { font-family: 'Instrument Serif', serif; }
+    ::selection { background: var(--gold); color: #0a0a0a; }
+
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .gradient-text { background: linear-gradient(to right, #D4AF37, #E8D48B, #D4AF37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .hero-glow { background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(212,175,55,0.12), transparent); }
+
+    .card { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.08); transition: all 0.4s ease; }
+    .card:hover { border-color: rgba(212,175,55,0.25); transform: translateY(-4px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); }
+
+    .code-window { background: #111111; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; }
+    .code-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+    .typing-line { opacity: 0; animation: fadeInLine 0.4s forwards; }
+    .typing-line:nth-child(1) { animation-delay: 0.2s; }
+    .typing-line:nth-child(2) { animation-delay: 0.5s; }
+    .typing-line:nth-child(3) { animation-delay: 0.8s; }
+    .typing-line:nth-child(4) { animation-delay: 1.1s; }
+    .typing-line:nth-child(5) { animation-delay: 1.4s; }
+    .typing-line:nth-child(6) { animation-delay: 1.7s; }
+    .typing-line:nth-child(7) { animation-delay: 2.0s; }
+    @keyframes fadeInLine { to { opacity: 1; } }
+
+    .cursor-blink { display: inline-block; width: 2px; height: 1.1em; background: var(--gold); animation: blink 1s step-end infinite; vertical-align: text; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .shimmer { position: relative; overflow: hidden; }
+    .shimmer::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(to right, transparent, rgba(212,175,55,0.04), transparent); animation: shimmer 5s infinite; }
+    @keyframes shimmer { to { left: 100%; } }
+
+    .btn-glow { position: relative; z-index: 1; }
+    .btn-glow::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: linear-gradient(135deg, #D4AF37, #B8960D); z-index: -1; opacity: 0; transition: opacity 0.3s; }
+    .btn-glow:hover::before { opacity: 1; }
+
+    .nav-blur { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+
+    .pulse-dot { animation: pulse-ring 2s infinite; }
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); } 70% { box-shadow: 0 0 0 10px rgba(212,175,55,0); } 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); } }
+
+    @media (max-width: 768px) { .hero-title { font-size: 40px !important; } }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 nav-blur bg-neutral-900/80 border border-white/10 rounded-full px-2 py-2 flex items-center gap-1 shadow-2xl max-w-2xl w-[95%] md:w-auto">
+    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:text-[#D4AF37] transition-colors">
+      <span class="iconify text-[#D4AF37]" data-icon="mdi:atom-variant" data-width="20"></span>
+      <span class="font-semibold tracking-tight">Nexus</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="#features" class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors rounded-full">Features</a>
+      <a href="#workflow" class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors rounded-full">Workflow</a>
+      <a href="#testimonials" class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors rounded-full">Testimonials</a>
+      <a href="#pricing" class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors rounded-full">Pricing</a>
+    </div>
+    <div class="flex items-center gap-2 ml-auto">
+      <a href="#" class="px-4 py-2 text-sm font-medium text-neutral-300 hover:text-white transition-colors hidden md:block">Sign In</a>
+      <a href="#pricing" class="px-5 py-2 bg-[#D4AF37] text-neutral-900 text-sm font-semibold rounded-full hover:bg-[#E8D48B] transition-colors">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <!-- Background glow -->
+    <div class="absolute inset-0 hero-glow pointer-events-none"></div>
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=60 height=60 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M60 0H0v60%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%220.5%22/%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <!-- Badge -->
+      <div class="scroll-reveal inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8">
+        <span class="w-2 h-2 rounded-full bg-[#D4AF37] pulse-dot"></span>
+        <span class="text-xs font-medium tracking-wide text-neutral-300">AI-Powered Development — Now in Public Beta</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="scroll-reveal hero-title text-5xl md:text-7xl font-serif italic tracking-tight leading-[1.05] mb-6">
+        Ship code <span class="gradient-text">10x faster</span><br />with AI at your side
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="scroll-reveal text-lg md:text-xl font-light text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed" style="transition-delay: 100ms;">
+        Nexus understands your codebase, writes production-ready code, catches bugs before they ship, and learns your patterns — all in real-time inside your IDE.
+      </p>
+
+      <!-- CTAs -->
+      <div class="scroll-reveal flex flex-col sm:flex-row items-center justify-center gap-4 mb-16" style="transition-delay: 200ms;">
+        <a href="#pricing" class="btn-glow px-8 py-4 bg-[#D4AF37] text-neutral-900 font-semibold rounded-full text-base hover:bg-[#E8D48B] transition-colors shadow-2xl shadow-[#D4AF37]/10">
+          Start Free Trial
+          <span class="iconify inline-block ml-1" data-icon="mdi:arrow-right" data-width="18"></span>
+        </a>
+        <a href="#workflow" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full text-base hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all">
+          <span class="iconify inline-block mr-1" data-icon="mdi:play-circle-outline" data-width="18"></span>
+          Watch Demo
+        </a>
+      </div>
+
+      <!-- Code Window -->
+      <div class="scroll-reveal code-window max-w-3xl mx-auto text-left" style="transition-delay: 300ms;">
+        <!-- Title bar -->
+        <div class="flex items-center gap-2 px-5 py-4 border-b border-white/10">
+          <div class="code-dot bg-red-500/80"></div>
+          <div class="code-dot bg-yellow-500/80"></div>
+          <div class="code-dot bg-green-500/80"></div>
+          <span class="ml-3 text-xs text-neutral-500 font-medium">nexus.ai — terminal</span>
+        </div>
+        <!-- Code content -->
+        <div class="p-6 text-sm font-mono leading-7 text-neutral-300 overflow-x-auto">
+          <div class="typing-line"><span class="text-[#D4AF37]">$</span> nexus init --ai</div>
+          <div class="typing-line text-neutral-500">⟳ Analyzing codebase... 2,847 files indexed</div>
+          <div class="typing-line text-neutral-500">⟳ Training on your patterns... done</div>
+          <div class="typing-line"><span class="text-[#D4AF37]">$</span> nexus generate "add auth with OAuth2"</div>
+          <div class="typing-line"><span class="text-green-400">✓</span> Created <span class="text-white">src/middleware/auth.ts</span></div>
+          <div class="typing-line"><span class="text-green-400">✓</span> Created <span class="text-white">src/routes/oauth.ts</span></div>
+          <div class="typing-line"><span class="text-green-400">✓</span> Updated <span class="text-white">src/config/session.ts</span></div>
+          <div class="typing-line text-neutral-500">⟳ Running tests... 12/12 passed <span class="text-green-400">✓</span></div>
+          <div class="mt-2"><span class="cursor-blink"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none"></div>
+  </section>
+
+  <!-- ========== TRUSTED BY ========== -->
+  <section class="py-16 border-t border-white/5">
+    <div class="max-w-5xl mx-auto px-6">
+      <p class="text-center text-xs font-regular tracking-[0.2em] uppercase text-neutral-500 mb-10">Trusted by engineering teams at</p>
+      <div class="flex flex-wrap items-center justify-center gap-10 opacity-40">
+        <span class="text-xl font-semibold tracking-tight">Vercel</span>
+        <span class="text-xl font-semibold tracking-tight">Stripe</span>
+        <span class="text-xl font-semibold tracking-tight">Linear</span>
+        <span class="text-xl font-semibold tracking-tight">Notion</span>
+        <span class="text-xl font-semibold tracking-tight">Figma</span>
+        <span class="text-xl font-semibold tracking-tight">Raycast</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section id="features" class="py-24 md:py-32">
+    <div class="max-w-6xl mx-auto px-6">
+      <!-- Section header -->
+      <div class="text-center mb-16">
+        <p class="scroll-reveal text-xs font-regular tracking-[0.2em] uppercase text-[#D4AF37] mb-4">Capabilities</p>
+        <h2 class="scroll-reveal text-3xl md:text-4xl font-serif italic tracking-tight leading-tight">
+          Everything you need to<br /><span class="gradient-text">build smarter</span>
+        </h2>
+      </div>
+
+      <!-- Feature grid -->
+      <div class="grid md:grid-cols-2 gap-5">
+        <!-- Feature 1 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:brain" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Context-Aware Generation</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Nexus reads your entire repo — types, patterns, dependencies — and generates code that fits seamlessly. No copy-paste. No hallucinations.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer" style="transition-delay: 100ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:bug-check" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Real-Time Bug Detection</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Catch logic errors, type mismatches, and security vulnerabilities as you type — before they reach production. Always-on, always-accurate.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer" style="transition-delay: 200ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:source-branch" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Smart Refactoring</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Describe what you want in plain English. Nexus restructures code, extracts modules, and migrates APIs across your entire project safely.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer" style="transition-delay: 300ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:test-tube" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Auto-Generated Tests</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Unit tests, integration tests, edge cases — all generated from your code's actual behavior. Coverage jumps from 40% to 95% overnight.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer" style="transition-delay: 400ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:lightning-bolt" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Instant Documentation</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">JSDoc, README, API references — Nexus documents your codebase as it evolves. Your docs are never out of date again.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="scroll-reveal card rounded-2xl p-8 shimmer" style="transition-delay: 500ms;">
+          <div class="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:shield-lock" data-width="24"></span>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight mb-2">Zero Data Retention</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Your code never leaves your machine. Nexus runs locally with optional cloud augmentation — end-to-end encrypted, SOC 2 compliant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WORKFLOW ========== -->
+  <section id="workflow" class="py-24 md:py-32 bg-neutral-950 border-t border-b border-white/5">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="scroll-reveal text-xs font-regular tracking-[0.2em] uppercase text-[#D4AF37] mb-4">How it works</p>
+        <h2 class="scroll-reveal text-3xl md:text-4xl font-serif italic tracking-tight leading-tight">
+          Three steps to<br /><span class="gradient-text">supercharged dev</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="scroll-reveal text-center">
+          <div class="w-16 h-16 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-serif italic text-[#D4AF37]">01</span>
+          </div>
+          <h3 class="text-base font-semibold tracking-tight mb-2">Connect your repo</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">One command indexes your project. Nexus understands your stack, conventions, and architecture in seconds.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="scroll-reveal text-center" style="transition-delay: 100ms;">
+          <div class="w-16 h-16 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-serif italic text-[#D4AF37]">02</span>
+          </div>
+          <h3 class="text-base font-semibold tracking-tight mb-2">Describe your intent</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Use natural language, keyboard shortcuts, or inline comments. Nexus translates intent into production-grade code instantly.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="scroll-reveal text-center" style="transition-delay: 200ms;">
+          <div class="w-16 h-16 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-serif italic text-[#D4AF37]">03</span>
+          </div>
+          <h3 class="text-base font-semibold tracking-tight mb-2">Ship with confidence</h3>
+          <p class="text-sm text-neutral-400 font-light leading-relaxed">Auto-tested, documented, and reviewed. Push to deploy knowing Nexus already validated every change it made.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS ========== -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="scroll-reveal grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-4xl md:text-5xl font-serif italic tracking-tight gradient-text mb-2">10x</div>
+          <p class="text-xs text-neutral-500 font-regular tracking-[0.15em] uppercase">Faster Development</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-serif italic tracking-tight gradient-text mb-2">95%</div>
+          <p class="text-xs text-neutral-500 font-regular tracking-[0.15em] uppercase">Test Coverage</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-serif italic tracking-tight gradient-text mb-2">50k+</div>
+          <p class="text-xs text-neutral-500 font-regular tracking-[0.15em] uppercase">Developers</p>
+        </div>
+        <div>
+          <div class="text-4xl md:text-5xl font-serif italic tracking-tight gradient-text mb-2">0</div>
+          <p class="text-xs text-neutral-500 font-regular tracking-[0.15em] uppercase">Data Stored</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section id="testimonials" class="py-24 md:py-32 bg-neutral-950 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="scroll-reveal text-xs font-regular tracking-[0.2em] uppercase text-[#D4AF37] mb-4">Testimonials</p>
+        <h2 class="scroll-reveal text-3xl md:text-4xl font-serif italic tracking-tight leading-tight">
+          Loved by <span class="gradient-text">builders</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Testimonial 1 -->
+        <div class="scroll-reveal card rounded-2xl p-7">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="https://picsum.photos/seed/dev-sarah/48/48.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover grayscale opacity-80" />
+            <div>
+              <p class="text-sm font-semibold">Sarah Chen</p>
+              <p class="text-xs text-neutral-500">Staff Engineer, Vercel</p>
+            </div>
+            <span class="iconify text-[#D4AF37] ml-auto" data-icon="mdi:format-quote-close" data-width="20"></span>
+          </div>
+          <p class="text-sm text-neutral-300 font-light leading-relaxed">Nexus understands our monorepo better than most of our team. It refactored our auth flow in 30 seconds — something that would've taken us two days.</p>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="scroll-reveal card rounded-2xl p-7" style="transition-delay: 100ms;">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="https://picsum.photos/seed/dev-marcus/48/48.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover grayscale opacity-80" />
+            <div>
+              <p class="text-sm font-semibold">Marcus Rivera</p>
+              <p class="text-xs text-neutral-500">CTO, Lattice</p>
+            </div>
+            <span class="iconify text-[#D4AF37] ml-auto" data-icon="mdi:format-quote-close" data-width="20"></span>
+          </div>
+          <p class="text-sm text-neutral-300 font-light leading-relaxed">We went from 42% to 97% test coverage in a weekend. Nexus generated meaningful tests — not just happy path coverage, but real edge cases.</p>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="scroll-reveal card rounded-2xl p-7" style="transition-delay: 200ms;">
+          <div class="flex items-center gap-3 mb-5">
+            <img src="https://picsum.photos/seed/dev-aiko/48/48.jpg" alt="Avatar" class="w-10 h-10 rounded-full object-cover grayscale opacity-80" />
+            <div>
+              <p class="text-sm font-semibold">Aiko Tanaka</p>
+              <p class="text-xs text-neutral-500">Lead Dev, Stripe</p>
+            </div>
+            <span class="iconify text-[#D4AF37] ml-auto" data-icon="mdi:format-quote-close" data-width="20"></span>
+          </div>
+          <p class="text-sm text-neutral-300 font-light leading-relaxed">The fact that nothing leaves my machine was the deciding factor. Nexus feels like a senior pair programmer who actually reads the codebase first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRICING ========== -->
+  <section id="pricing" class="py-24 md:py-32 border-t border-white/5">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="scroll-reveal text-xs font-regular tracking-[0.2em] uppercase text-[#D4AF37] mb-4">Pricing</p>
+        <h2 class="scroll-reveal text-3xl md:text-4xl font-serif italic tracking-tight leading-tight">
+          Start free, <span class="gradient-text">scale as you grow</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Free -->
+        <div class="scroll-reveal card rounded-2xl p-8 flex flex-col">
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-neutral-500 mb-1">Starter</p>
+          <div class="text-4xl font-serif italic tracking-tight mb-1">$0</div>
+          <p class="text-xs text-neutral-500 mb-6">Free forever</p>
+          <ul class="text-sm text-neutral-300 font-light space-y-3 mb-8 flex-1">
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>50 AI generations/day</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Basic code completion</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Community support</li>
+          </ul>
+          <a href="#" class="block text-center px-6 py-3 border border-white/20 rounded-full text-sm font-semibold hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all">Get Started</a>
+        </div>
+
+        <!-- Pro (highlighted) -->
+        <div class="scroll-reveal card rounded-2xl p-8 flex flex-col border-[#D4AF37]/30 bg-neutral-900/80 relative" style="transition-delay: 100ms;">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#D4AF37] text-neutral-900 text-[10px] font-bold tracking-widest uppercase rounded-full">Popular</div>
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-[#D4AF37] mb-1">Pro</p>
+          <div class="text-4xl font-serif italic tracking-tight mb-1">$29</div>
+          <p class="text-xs text-neutral-500 mb-6">per seat / month</p>
+          <ul class="text-sm text-neutral-300 font-light space-y-3 mb-8 flex-1">
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Unlimited generations</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Full repo context</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Smart refactoring</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Auto-tests & docs</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Priority support</li>
+          </ul>
+          <a href="#" class="btn-glow block text-center px-6 py-3 bg-[#D4AF37] text-neutral-900 rounded-full text-sm font-semibold hover:bg-[#E8D48B] transition-colors shadow-2xl shadow-[#D4AF37]/10">Start Free Trial</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="scroll-reveal card rounded-2xl p-8 flex flex-col" style="transition-delay: 200ms;">
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-neutral-500 mb-1">Enterprise</p>
+          <div class="text-4xl font-serif italic tracking-tight mb-1">Custom</div>
+          <p class="text-xs text-neutral-500 mb-6">contact us</p>
+          <ul class="text-sm text-neutral-300 font-light space-y-3 mb-8 flex-1">
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Everything in Pro</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Self-hosted option</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>SSO & SAML</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Dedicated account manager</li>
+            <li class="flex items-start gap-2"><span class="iconify text-[#D4AF37] mt-0.5" data-icon="mdi:check" data-width="16"></span>Custom model training</li>
+          </ul>
+          <a href="#" class="block text-center px-6 py-3 border border-white/20 rounded-full text-sm font-semibold hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FINAL CTA ========== -->
+  <section class="py-24 md:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 hero-glow pointer-events-none"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <h2 class="scroll-reveal text-3xl md:text-5xl font-serif italic tracking-tight leading-tight mb-6">
+        Ready to build<br /><span class="gradient-text">at the speed of thought</span>?
+      </h2>
+      <p class="scroll-reveal text-lg text-neutral-400 font-light leading-relaxed mb-10" style="transition-delay: 100ms;">
+        Join 50,000+ developers who ship faster with Nexus. Free to start, no credit card required.
+      </p>
+      <div class="scroll-reveal flex flex-col sm:flex-row items-center justify-center gap-4" style="transition-delay: 200ms;">
+        <a href="#" class="btn-glow px-8 py-4 bg-[#D4AF37] text-neutral-900 font-semibold rounded-full text-base hover:bg-[#E8D48B] transition-colors shadow-2xl shadow-[#D4AF37]/10">
+          Start Free Trial
+          <span class="iconify inline-block ml-1" data-icon="mdi:arrow-right" data-width="18"></span>
+        </a>
+        <a href="#" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full text-base hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all">
+          <span class="iconify inline-block mr-1" data-icon="mdi:github" data-width="18"></span>
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="border-t border-white/10 py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="iconify text-[#D4AF37]" data-icon="mdi:atom-variant" data-width="20"></span>
+            <span class="text-sm font-semibold tracking-tight">Nexus</span>
+          </div>
+          <p class="text-sm text-neutral-500 font-light leading-relaxed">AI-powered development tools that understand your codebase and ship with you.</p>
+        </div>
+        <div>
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-neutral-500 mb-4">Product</p>
+          <ul class="space-y-2">
+            <li><a href="#features" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Pricing</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Changelog</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Docs</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-neutral-500 mb-4">Company</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">About</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Blog</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Careers</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-xs font-regular tracking-[0.15em] uppercase text-neutral-500 mb-4">Legal</p>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Privacy</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Terms</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">Security</a></li>
+            <li><a href="#" class="text-sm text-neutral-400 hover:text-[#D4AF37] transition-colors">SOC 2</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-neutral-600">&copy; 2025 Nexus. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="text-neutral-500 hover:text-[#D4AF37] transition-colors"><span class="iconify" data-icon="mdi:twitter" data-width="18"></span></a>
+          <a href="#" class="text-neutral-500 hover:text-[#D4AF37] transition-colors"><span class="iconify" data-icon="mdi:github" data-width="18"></span></a>
+          <a href="#" class="text-neutral-500 hover:text-[#D4AF37] transition-colors"><span class="iconify" data-icon="mdi:discord" data-width="18"></span></a>
+          <a href="#" class="text-neutral-500 hover:text-[#D4AF37] transition-colors"><span class="iconify" data-icon="mdi:linkedin" data-width="18"></span></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
