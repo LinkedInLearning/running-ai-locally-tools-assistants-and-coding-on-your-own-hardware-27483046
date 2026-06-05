@@ -21,7 +21,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 ```
 
 If approved, you can also launch the local assistants with:
-*Warning: launching these apps may change your default local configurations.*
+**Warning: launching these apps may change your default local configurations.**
 
 ```sh
 ollama launch claude
