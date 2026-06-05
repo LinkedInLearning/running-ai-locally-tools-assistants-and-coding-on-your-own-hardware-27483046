@@ -29,7 +29,7 @@ ollama launch claude
 ollama launch codex-app
 ```
 
-### Suggested Ollama Models by Hardware
+### Suggested Open-Weight Models by Hardware
 
 Use the table below as a starting point when choosing a model for your device.
 
