@@ -7,6 +7,8 @@ This is the repository for the LinkedIn Learning course `Running AI Locally: Too
 
 _See the readme file in the main branch for updated instructions and information._
 
+Explore the process of running AI models locally to establish control over your solutions with regards to privacy, latency, and cost. Learn how to set up a local AI stack, including understanding models, runtimes, and integration with your hardware. Discover ways to deploy feature-rich AI assistants and tools that enhance your coding workflows. Evaluate practical scenarios for using offline language models on mobile devices. This course is designed with developers, software engineers, and IT professionals in mind, offering intermediate-level insights suitable for technical professionals eager to experiment with AI-powered tools. By applying the knowledge gained, you can effectively incorporate AI into personal or professional workflows without cloud dependencies. This hands-on approach to local AI enhances understanding and skill in deploying systems tailored to specific needs.
+
 ## Instructions
 This repository has resources and configuration files from the course.
 
