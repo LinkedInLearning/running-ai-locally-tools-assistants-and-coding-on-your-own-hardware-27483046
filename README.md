@@ -81,7 +81,7 @@ This starts the services defined in [open_webui/docker-compose.yml](~/linked_in_
 
 Ronnie Sheer
 
-Check out my other courses on [LinkedIn Learning]([https://www.linkedin.com/learning/instructors/](https://www.linkedin.com/learning/instructors/ronnie-sheer?u=104)).
+Check out my other courses on [LinkedIn Learning]([https://www.linkedin.com/learning/instructors/](https://www.linkedin.com/learning/instructors/ronnie-sheer?u=104).
 
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
